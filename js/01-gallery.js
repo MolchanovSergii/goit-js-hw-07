@@ -21,9 +21,10 @@ const markupGallery = galleryItems.map(({preview, original, description}) =>
 gallery.insertAdjacentHTML('beforeend', markupGallery);
 gallery.addEventListener('click', onClickGallery);
 
+
 function onClickGallery(event) {
     event.preventDefault();
-    const {target} = event
+    const { target } = event;
     if (!target.classList.contains("gallery__image")) {
         return;
     }
@@ -31,17 +32,23 @@ function onClickGallery(event) {
     const original = target.dataset.source;
     const description = target.alt;
     const modal = basicLightbox.create(
-      `<img
+        `<img
             class="modal__image"
             src="${original}"
             alt="${description}"
             />`,
- 
     );
 
-    modal.show();
+    modal.show();  
+
+    if (modal.visible()) {
+        window.addEventListener("keydown", handleKeyDown);
+    }
+
+    function handleKeyDown(event) {
+      if (event.keyCode === 27) {
+        modal.close();
+        window.removeEventListener("keydown", handleKeyDown);
+      }
+    }
 }
-
-
-
-
